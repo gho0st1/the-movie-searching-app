@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"target": "ESNext", // Set target to the latest ECMAScript features
+		"module": "ESNext", // Specify module code generation
+		"moduleResolution": "node", // Node.js module resolution
+		"strict": false, // Enable all strict type-checking options
+		"checkJs": true, // Enable type checking in JavaScript files
+		"jsx": "react-jsx", // Specify JSX code generation
+		"allowJs": true,
+		"noImplicitAny": false
+	},
+	"include": [
+		"src/**/*" // Include all JavaScript/TypeScript files in the src directory
+	]
+}
