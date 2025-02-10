@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import MovieCard from "./components/MovieCard.jsx";
 import Search from "./components/Search.jsx";
 import Spinner from "./components/Spinner.jsx";
 import { fetchMovies } from "./services/movieService.js";
@@ -48,7 +49,7 @@ function App() {
 					) : (
 						<ul>
 							{ movieList.map((movie) => (
-								<li className="text-white" key={ movie.id }>{ movie.title }</li>
+								<MovieCard key={ movie.id } movie={ movie } />
 							)) }
 						</ul>
 					) }
