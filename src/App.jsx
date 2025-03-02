@@ -3,6 +3,7 @@ import { useDebounce } from "react-use";
 import MovieCard from "./components/MovieCard.jsx";
 import Search from "./components/Search.jsx";
 import Spinner from "./components/Spinner.jsx";
+import { getTrendingMovies, updateSearchCount } from "./services/appwriteService.js";
 import { fetchMovies } from "./services/movieService.js";
 
 function App() {
@@ -15,12 +16,18 @@ function App() {
 	const [errorMessage, setErrorMessage] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 
+	const [trendingList, setTrendingList] = useState([]);
+
 	useEffect(() => {
 		setIsLoading(true);
 
 		fetchMovies(debouncedSearchTerm)
 			.then((data) => {
 				setMovieList(data.results || []);
+
+				if(data.results.length > 0) {
+					updateSearchCount(debouncedSearchTerm, data.results[0]);
+				}
 			})
 			.catch((error) => {
 				setErrorMessage(error);
@@ -29,6 +36,16 @@ function App() {
 				setIsLoading(false);
 			});
 	}, [debouncedSearchTerm]);
+
+	useEffect(() => {
+		try {
+			getTrendingMovies().then((movies) => {
+				setTrendingList(movies);
+			});
+		} catch (error) {
+			console.log("Error fetching trending list", error);
+		}
+	}, []);
 
 	return (
 		<main>
@@ -42,6 +59,21 @@ function App() {
 				</header>
 
 				<Search searchTerm={ searchTerm } setSearchTerm={ setSearchTerm } />
+
+				{ trendingList.length > 0 && (
+					<section className="trending">
+						<h2>Trending Movies</h2>
+
+						<ul>
+							{ trendingList.map((movie, index) => (
+								<li key={ movie.$id }>
+									<p>{ index + 1 }</p>
+									<img src={ movie.poster_url } alt={ movie.title } />
+								</li>
+							)) }
+						</ul>
+					</section>
+				) }
 
 				<section className="all-movies">
 					<h2>All Movies</h2>
